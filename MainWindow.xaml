@@ -6,6 +6,34 @@
         xmlns:local="clr-namespace:YSGM_GUI"
         mc:Ignorable="d"
         Title="YSGM" ResizeMode="CanMinimize" HorizontalAlignment="Left" VerticalAlignment="Top" Width="950" Height="575" Icon="/荧.ico">
+    <Window.Resources>
+        <ControlTemplate x:Key="位置" TargetType="{x:Type Label}">
+            <Grid>
+                <Label Content="Label" HorizontalAlignment="Left" Margin="29,59,0,0" VerticalAlignment="Top"/>
+            </Grid>
+        </ControlTemplate>
+        <Style x:Key="LabelStyle1" TargetType="{x:Type Label}">
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Top"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Label}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Window.Background>
         <ImageBrush ImageSource="Genshin.png" Stretch="UniformToFill"/>
     </Window.Background>
@@ -19,10 +47,24 @@
         <TabControl HorizontalAlignment="Center" Height="375" VerticalAlignment="Top" Width="880" Background="{x:Null}" BorderBrush="{x:Null}" Margin="0,60,0,0">
             <TabItem Header="位置" Width="60" Height="25" Background="#99000000" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource DefaultTabItemStyle}">
                 <Grid Background="#7F000000">
-
+                    <Label x:Name="chuansong" Content="#传送" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="83" Height="40" FontSize="20" FontWeight="Bold" Background="{x:Null}" Foreground="White"/>
+                    <Label Content="坐标" HorizontalAlignment="Left" Margin="20,60,0,0" VerticalAlignment="Top" FontSize="16" Foreground="White" Width="50" Height="30"/>
+                    <Label Content="场景ID" HorizontalAlignment="Left" Margin="20,100,0,0" VerticalAlignment="Top" Width="73" Height="30" FontSize="16" Foreground="White"/>
+                    <Label Content="秘境" HorizontalAlignment="Left" Margin="20,140,0,0" VerticalAlignment="Top" Width="73" Height="30" Foreground="White" FontSize="16"/>
+                    <Label Content="开传送点" HorizontalAlignment="Left" Margin="20,180,0,0" VerticalAlignment="Top" Foreground="White" Width="91" Height="30" FontSize="16"/>
+                    <TextBox TextWrapping="Wrap" Text="是" Width="500" Height="30" FontSize="16" Margin="120,60,0,0" TextChanged="TextBox_TextChanged" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionTextBrush="{x:Null}" SelectionBrush="{x:Null}" Foreground="{x:Null}" Background="{x:Null}" BorderBrush="#FF898585"/>
+                    <TextBox TextWrapping="Wrap" Text="是" Width="500" Height="30" FontSize="16" Margin="120,100,0,0" TextChanged="TextBox_TextChanged" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionTextBrush="{x:Null}" SelectionBrush="{x:Null}" Foreground="{x:Null}" BorderBrush="#FF898585" Background="{x:Null}"/>
+                    <TextBox TextWrapping="Wrap" Text="是" Width="500" Height="30" FontSize="16" Margin="120,140,0,0" TextChanged="TextBox_TextChanged" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionTextBrush="{x:Null}" SelectionBrush="{x:Null}" Foreground="{x:Null}" BorderBrush="#FF898585" Background="{x:Null}"/>
+                    <Button Content="执行" HorizontalAlignment="Left" Margin="625,60,0,0" VerticalAlignment="Top" Background="{x:Null}" FontSize="16" Height="30" Foreground="#FFF8F8F8"/>
+                    <Button Content="执行" HorizontalAlignment="Left" Margin="625,100,0,0" VerticalAlignment="Top" Background="{x:Null}" FontSize="16" Height="30" Foreground="#FFF8F8F8"/>
+                    <Button Content="执行" HorizontalAlignment="Left" Margin="625,140,0,0" VerticalAlignment="Top" Background="{x:Null}" FontSize="16" Height="30" Foreground="#FFF8F8F8" RenderTransformOrigin="0.907,0.685"/>
+                    <Button Content="执行" HorizontalAlignment="Left" Margin="625,180,0,0" VerticalAlignment="Top" Background="{x:Null}" FontSize="16" Height="30" Foreground="#FFF8F8F8"/>
+                    <TextBox TextWrapping="Wrap" Text="是" Width="150" Height="30" FontSize="16" Margin="370,180,0,0" TextChanged="TextBox_TextChanged" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionTextBrush="{x:Null}" SelectionBrush="{x:Null}" Foreground="{x:Null}" BorderBrush="#FF898585" Background="{x:Null}"/>
+                    <CheckBox Content="开启所有" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="525,188,0,0" RenderTransformOrigin="-0.526,1.471" Width="90" Height="30" Checked="CheckBox_Checked" FontSize="14" Foreground="#FFF8F8F8"/>
+                    <ComboBox Width="250" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,180,0,0" BorderBrush="#FFA8A7A7" Foreground="#FFF8F8F8" Background="{x:Null}"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="数据" Width="60" Height="25" Background="#99000000" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource DefaultTabItemStyle}">
+            <TabItem Header="数据" Width="60" Height="25" Background="#99000000" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource DefaultTabItemStyle}" HorizontalAlignment="Right" Margin="0,-1,0,1">
                 <Grid Background="#7F000000"/>
             </TabItem>
             <TabItem Header="角色" Width="60" Height="25" Background="#99000000" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource DefaultTabItemStyle}">
@@ -60,5 +102,6 @@
             </TabItem>
         </TabControl>
         <Button Style="{DynamicResource DefaultButton}" Content="连接测试" HorizontalAlignment="Left" Height="36" Margin="810,454,0,0" VerticalAlignment="Top" Width="80" BorderBrush="White" Background="#99000000" Foreground="White" BorderThickness="2,2,2,2"/>
+        <Label Content="Label" HorizontalAlignment="Left" Height="85" Margin="-150,350,0,0" VerticalAlignment="Top" Width="69"/>
     </Grid>
 </Window>

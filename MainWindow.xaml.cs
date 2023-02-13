@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,62 +24,37 @@ namespace YSGM_GUI
         {
             InitializeComponent();
             CommandMap.RegisterAll();
-
-            LoadConfiguration();
         }
 
-        private void ChildThreadStart(object? cmd)
+        public string ExecuteCommand(string userInput)
         {
-            if (cmd == null)
+            string[] split = userInput!.Split(' ');
+            string cmd = split[0];
+            // If the user entered a valid command, execute it.
+            if (CommandMap.handlers.ContainsKey(cmd))
             {
-                return;
-            }
-            string res = Execute.ExecuteCommand((string)cmd);
-            App.Current.Dispatcher.Invoke(new Action(() => {
-                callback.Content = res;
-                ExecuteButton.IsEnabled = true;
-                ExecuteButton.Content = "执行";
-            }));
-            return;
-        }
+                var handler = CommandMap.handlers[cmd];
+                var arguments = split.Skip(1).ToArray();
 
-        private void LoadConfiguration()
-        {
-            string[] config;
-            if (File.Exists("configuration"))
-            {
-                config = File.ReadAllLines("configuration");
+                return handler.Execute(arguments);
             }
             else
             {
-                config = new string[5];
-                config[0] = "127.0.0.1";//ssh host
-                config[1] = "root";//ssh user
-                config[2] = "http://127.0.0.1:20011/api";//muip host
-                config[3] = "dev_gio";//target region
-                config[4] = "0";//uid
-                File.WriteAllLines("configuration", config);
+                return "Invalid command.";//
             }
-
-            hostIP.Text = config[0];
-            sshUser.Text = config[1];
-            port.Text = config[2].Split(":")[2].Split("/")[0];
-            targetRegion.Text = config[3];
-            defaultUID.Text = config[4];
-
         }
 
         private void ExecuteButton_Click(object sender, RoutedEventArgs e)
         {
-            //callback.Content = ExecuteCommand(commandBox.Text);
-            Thread thread = new Thread(ChildThreadStart);
-            thread.Start(commandBox.Text);
-
-            ExecuteButton.IsEnabled = false;
-            ExecuteButton.Content = "等待结果";
+            callback.Content = ExecuteCommand(commandBox.Text);
         }
 
-        private void TestButton_Click(object sender, RoutedEventArgs e)
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
 
         }
