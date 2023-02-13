@@ -42,7 +42,7 @@ namespace YSGM_GUI
         {
             Trace.WriteLine("GM");
 #if DEBUG
-            var builder = new UriBuilder("192.168.1.11:20011/api");
+            var builder = new UriBuilder("192.168.0.11:20011/api");
 #else
             var builder = new UriBuilder(ConfigurationManager.AppSettings.Get("MUIP_HOST")!);
 #endif
