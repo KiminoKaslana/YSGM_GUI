@@ -10,13 +10,13 @@
         <ImageBrush ImageSource="Genshin.png" Stretch="UniformToFill"/>
     </Window.Background>
     <Grid Width="900" Height="500">
-        <TextBox x:Name="commandBox" HorizontalAlignment="Left" Height="31" Margin="118,10,0,0" TextWrapping="Wrap" Text="gm 2 stamina infinite on" VerticalAlignment="Top" Width="671" VerticalContentAlignment="Center" Padding="5,0,0,0"/>
+        <TextBox x:Name="commandBox" HorizontalAlignment="Left" Height="36" Margin="118,10,0,0" TextWrapping="Wrap" Text="gm 2 stamina infinite on" VerticalAlignment="Top" Width="671" VerticalContentAlignment="Center" Padding="5,0,0,0" BorderBrush="White" Foreground="White" Background="#99000000" BorderThickness="2,2,2,2"/>
         <Label x:Name="callback" Content="Message" HorizontalAlignment="Right" Margin="0,0,111,10" Width="671" Foreground="White" BorderBrush="White" BorderThickness="2,2,2,2" Height="36" VerticalAlignment="Bottom" Background="#99000000" VerticalContentAlignment="Center" Padding="10,5,5,5"/>
-        <Button x:Name="ExecuteButton" Content="执行" Height="31" Margin="0,10,10,0" VerticalAlignment="Top" Click="ExecuteButton_Click" HorizontalAlignment="Right" Width="82" Style="{DynamicResource DefaultButton}" Background="#99000000" BorderBrush="White" Foreground="White" BorderThickness="2,2,2,2"/>
+        <Button x:Name="ExecuteButton" Content="执行" Height="36" Margin="0,10,10,0" VerticalAlignment="Top" Click="ExecuteButton_Click" HorizontalAlignment="Right" Width="80" Style="{DynamicResource DefaultButton}" Background="#99000000" BorderBrush="White" Foreground="White" BorderThickness="2,2,2,2"/>
         <Label Content="信息:" HorizontalAlignment="Left" Height="36" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="86" Foreground="White" BorderBrush="White" BorderThickness="2,2,2,2" Background="#99000000" VerticalContentAlignment="Center" Padding="10,5,5,5"/>
-        <Label Content="UID:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="31" Foreground="White" Background="{x:Null}" VerticalContentAlignment="Center"/>
-        <TextBox HorizontalAlignment="Left" Height="31" Margin="50,10,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="57" Background="White" BorderBrush="{x:Null}" Foreground="#FF3393FF" SelectionTextBrush="#FF75D0FF" VerticalContentAlignment="Center" Padding="5,0,0,0"/>
-        <TabControl HorizontalAlignment="Center" Height="375" VerticalAlignment="Center" Width="880" Background="{x:Null}" BorderBrush="{x:Null}">
+        <Label Content="UID:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="36" Foreground="White" Background="#99000000" VerticalContentAlignment="Center" BorderBrush="White" BorderThickness="2,2,0,2" Width="39"/>
+        <TextBox HorizontalAlignment="Left" Height="36" Margin="47,10,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Background="#99000000" BorderBrush="White" Foreground="White" SelectionTextBrush="#FF75D0FF" VerticalContentAlignment="Center" Padding="5,0,0,0" BorderThickness="2,2,2,2"/>
+        <TabControl HorizontalAlignment="Center" Height="375" VerticalAlignment="Top" Width="880" Background="{x:Null}" BorderBrush="{x:Null}" Margin="0,60,0,0">
             <TabItem Header="位置" Width="60" Height="25" Background="#99000000" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource DefaultTabItemStyle}">
                 <Grid Background="#7F000000">
 
@@ -41,9 +41,24 @@
                 <Grid Background="#7F000000"/>
             </TabItem>
             <TabItem Style="{DynamicResource DefaultTabItemStyle}" Header="GM设置" Width="60" Height="25" Background="#99000000" Foreground="White" BorderBrush="{x:Null}">
-                <Grid Background="#7F000000"/>
+                <Grid Background="#7F000000">
+                    <Label Content="服务器IP地址：" HorizontalAlignment="Left" Height="30" Margin="47,28,0,0" VerticalAlignment="Top" Width="120" Foreground="White" FontSize="14"/>
+                    <Button Content="保存" HorizontalAlignment="Left" Margin="752,276,0,0" VerticalAlignment="Top" Height="36" Width="80" BorderThickness="2,2,2,2" Background="#9956A6FF" Foreground="White" BorderBrush="White" Style="{DynamicResource DefaultButton}"/>
+                    <Label Content="默认UID：" HorizontalAlignment="Left" Height="30" Margin="47,73,0,0" VerticalAlignment="Top" Width="120" Foreground="White" FontSize="14"/>
+                    <Grid HorizontalAlignment="Left" Height="180" Margin="47,132,0,0" VerticalAlignment="Top" Width="375" Background="#7F820000">
+                        <Label Content="高级设置（除非你知道他们的作用，否则不要更改）" HorizontalAlignment="Center" Height="29" Margin="0,10,0,0" VerticalAlignment="Top" Width="355" Foreground="White" FontSize="14" FontWeight="Bold"/>
+                        <Label Content="目标区域：" HorizontalAlignment="Left" Height="30" Margin="10,44,0,0" VerticalAlignment="Top" Width="84" Foreground="White" FontSize="14"/>
+                        <Label Content="SSH用户：" HorizontalAlignment="Left" Height="30" Margin="10,79,0,0" VerticalAlignment="Top" Width="84" Foreground="White" FontSize="14"/>
+                        <Label Content="目标端口：" HorizontalAlignment="Left" Height="30" Margin="10,114,0,0" VerticalAlignment="Top" Width="84" Foreground="White" FontSize="14"/>
+                        <TextBox x:Name="targetRegion" HorizontalAlignment="Left" Height="30" Margin="130,44,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="235" VerticalContentAlignment="Center" Background="#4C000000" Foreground="White" BorderBrush="White" BorderThickness="2,2,2,2"/>
+                        <TextBox x:Name="sshUser" HorizontalAlignment="Left" Height="30" Margin="130,79,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="235" VerticalContentAlignment="Center" Background="#4C000000" Foreground="White" BorderBrush="White" BorderThickness="2,2,2,2"/>
+                        <TextBox x:Name="port" HorizontalAlignment="Left" Height="30" Margin="130,114,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="235" VerticalContentAlignment="Center" Background="#4C000000" Foreground="White" BorderBrush="White" BorderThickness="2,2,2,2"/>
+                    </Grid>
+                    <TextBox x:Name="hostIP" HorizontalAlignment="Left" Height="30" Margin="172,28,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="250" VerticalContentAlignment="Center" Background="#4C000000" Foreground="White" BorderBrush="White" BorderThickness="2,2,2,2"/>
+                    <TextBox x:Name="defaultUID" HorizontalAlignment="Left" Height="30" Margin="172,73,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="250" VerticalContentAlignment="Center" Background="#4C000000" Foreground="White" BorderBrush="White" BorderThickness="2,2,2,2"/>
+                </Grid>
             </TabItem>
         </TabControl>
-        <Button Style="{DynamicResource DefaultButton}" Content="连接测试" HorizontalAlignment="Left" Height="36" Margin="808,454,0,0" VerticalAlignment="Top" Width="82" BorderBrush="White" Background="#99000000" Foreground="White" BorderThickness="2,2,2,2"/>
+        <Button Style="{DynamicResource DefaultButton}" Content="连接测试" HorizontalAlignment="Left" Height="36" Margin="810,454,0,0" VerticalAlignment="Top" Width="80" BorderBrush="White" Background="#99000000" Foreground="White" BorderThickness="2,2,2,2"/>
     </Grid>
 </Window>
