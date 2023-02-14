@@ -30,6 +30,14 @@ namespace YSGM_GUI
             });
         }
 
+        public string FetchPlayerNum()
+        {
+            return GET(1101, new Dictionary<string, string>()
+            {
+                
+            });
+        }
+
         public string FetchPlayerBin(string uid)
         {
             return GET(1004, new Dictionary<string, string>()
@@ -42,7 +50,7 @@ namespace YSGM_GUI
         {
             Trace.WriteLine("GM");
 #if DEBUG
-            var builder = new UriBuilder("192.168.0.11:20011/api");
+            var builder = new UriBuilder("192.168.1.11:20011/api");
 #else
             var builder = new UriBuilder(ConfigurationManager.AppSettings.Get("MUIP_HOST")!);
 #endif
