@@ -27,6 +27,9 @@ namespace YSGM_GUI
     {
         string mainCMD = "";
         string parameter = "";
+        string additionalParameters = "";
+        TextBox currentFocusedBox;//当前正在操作的textbox
+        List<ListBoxItem> currentList;//当前正在操作的list
 
         public MainWindow()
         {
@@ -35,6 +38,8 @@ namespace YSGM_GUI
 
             LoadConfiguration();
         }
+
+        #region 应用级事件
 
         private void ChildThreadStart(object? cmd)
         {
@@ -85,7 +90,7 @@ namespace YSGM_GUI
 
         private void LoadConfiguration()
         {
-            string[] config = new string[5]; ;
+            string[] config = new string[5];
             if (File.Exists("App.config"))
             {
                 config[0] = ConfigurationManager.AppSettings.Get("SSH_HOST");
@@ -112,7 +117,7 @@ namespace YSGM_GUI
             uidBox.Text = config[4];
         }
 
-        private void ReadFileAndCreateList(string fileName)
+        private void ReadFileAndCreateList(string fileName, ref ListBox listBox)
         {
             List<ListBoxItem> listBoxItems = new List<ListBoxItem>();
 
@@ -134,10 +139,11 @@ namespace YSGM_GUI
                 listBoxItems.Add(boxItems[i]);
             }
 
-            positionList.ItemsSource = listBoxItems;
+            currentList = listBoxItems;
+
+            listBox.ItemsSource = listBoxItems;
         }
 
-        #region 窗口级事件
         private void ExecuteButton_Click(object sender, RoutedEventArgs e)
         {
             //callback.Content = ExecuteCommand(commandBox.Text);
@@ -163,27 +169,94 @@ namespace YSGM_GUI
         {
             MessageBox.Show(callback.Content.ToString());
         }
+
+        private void UpdateCMD()
+        {
+            commandBox.Text = "gm " + uidBox.Text + " " + mainCMD + " " + parameter + " " + additionalParameters;
+        }
+
+        private void SearchInList(string key, ref ListBox listBox)
+        {
+            Regex regex = new Regex(@".*" + key + @".*");
+
+            if (listBox != null)
+            {
+                if (currentList != null)
+                {
+                    Trace.WriteLine("search");
+
+                    List<ListBoxItem> list = new List<ListBoxItem>();
+
+                    for (int i = 0; i < currentList.Count; i++)
+                    {
+                        if (regex.IsMatch((string)currentList[i].Content))
+                        {
+                            list.Add(currentList[i]);
+                        }
+                    }
+
+                    listBox.ItemsSource = list;
+                }
+            }
+        }
+
+        private void Selected(object sender, SelectionChangedEventArgs e)//所有listbox共用此事件
+        {
+            Regex regex = new Regex(@"\d+");
+            ListBoxItem list = (ListBoxItem)((ListBox)sender).SelectedItem;
+            if (list == null)
+            {
+                return;
+            }
+
+            currentFocusedBox.Text = (string)list.Content;
+            parameter = regex.Match((string)list.Content).Value;
+
+            UpdateCMD();
+        }
+
         #endregion
 
         #region 位置页事件
+
+
         private void position_sceneID_GotFocus(object sender, RoutedEventArgs e)
         {
             mainCMD = "jump";
+            additionalParameters = "";
+
+            //UpdateCMD();
 
             TextBox textBox = (TextBox)sender;
-            textBox.Text = "";
+            currentFocusedBox = textBox;
+            //textBox.SelectAll();
 
-            ReadFileAndCreateList("Scene.txt");
+            if (textBox.Text == "点击后在此搜索或在右侧选择")
+            {
+                textBox.Text = "";
+            }
+
+            ReadFileAndCreateList("Scene.txt", ref positionList);
         }
 
         private void position_TPPoint_GotFocus(object sender, RoutedEventArgs e)
         {
             mainCMD = "point";
+            additionalParameters = "1";
+
+            //UpdateCMD();
 
             TextBox textBox = (TextBox)sender;
-            textBox.Text = "";
+            currentFocusedBox = textBox;
+            //textBox.SelectAll();
 
-            ReadFileAndCreateList("Scene.txt");
+            if (textBox.Text == "点击后在此搜索或在右侧选择")
+            {
+                textBox.Text = "";
+            }
+
+
+            ReadFileAndCreateList("Scene.txt", ref positionList);
         }
 
         private void positionGrid_MouseDown(object sender, MouseButtonEventArgs e)
@@ -195,31 +268,54 @@ namespace YSGM_GUI
 
             if (position_TPPoint.Text == "")
             {
-                position_sceneID.Text = "点击后在此搜索或在右侧选择";
+                position_TPPoint.Text = "点击后在此搜索或在右侧选择";
             }
 
-            positionGrid.Focus();
+            commandBox.Focus();
         }
 
         private void position_IsOpenAllTPPoint_Click(object sender, RoutedEventArgs e)
         {
+            if (position_IsOpenAllTPPoint.IsChecked != null)
+            {
+                if ((bool)position_IsOpenAllTPPoint.IsChecked)
+                {
+                    additionalParameters = "all";
+                }
+                else
+                {
+                    additionalParameters = position_TPPointNum.Text;
+                }
 
+                UpdateCMD();
+            }
         }
 
-        private void positionList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void position_sceneID_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Trace.WriteLine("change");
+            mainCMD = "jump";
+            UpdateCMD();
 
-            UpdateCMDByList();
+            SearchInList(position_sceneID.Text, ref positionList);
+
         }
 
-        private void UpdateCMDByList()
+        private void position_TPPoint_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Regex regex = new Regex(@"\d+");
+            mainCMD = "point";
+            UpdateCMD();
 
-            ListBoxItem list = (ListBoxItem)positionList.SelectedItem;
-            commandBox.Text = "gm " + uidBox.Text + " " + mainCMD + " " + regex.Match((string)list.Content).Value + parameter;
+            SearchInList(position_TPPoint.Text, ref positionList);
         }
+
+        private void position_TPPointNum_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            mainCMD = "point";
+            additionalParameters = position_TPPointNum.Text;
+            UpdateCMD();
+        }
+
+
 
         #endregion
 
@@ -253,6 +349,7 @@ namespace YSGM_GUI
 
             Trace.WriteLine(ConfigurationManager.AppSettings.Get("SSH_HOST"));
         }
+
 
 
 
