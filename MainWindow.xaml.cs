@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
+using System.Reflection.Metadata;
 
 namespace YSGM_GUI
 {
@@ -219,8 +220,8 @@ namespace YSGM_GUI
 
         #region 位置页事件
 
-
-        private void position_sceneID_GotFocus(object sender, RoutedEventArgs e)
+        //位置
+        private void position_sceneID_GotFocus(object sender, RoutedEventArgs e) //场景ID
         {
             mainCMD = "jump";
             additionalParameters = "";
@@ -228,6 +229,7 @@ namespace YSGM_GUI
             //UpdateCMD();
 
             TextBox textBox = (TextBox)sender;
+            //TextBox textbox = new TextBox();
             currentFocusedBox = textBox;
             //textBox.SelectAll();
 
@@ -257,7 +259,7 @@ namespace YSGM_GUI
 
 
             ReadFileAndCreateList("Scene.txt", ref positionList);
-        }
+        }//开传送点
 
         private void positionGrid_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -295,7 +297,6 @@ namespace YSGM_GUI
         {
             mainCMD = "jump";
             UpdateCMD();
-
             SearchInList(position_sceneID.Text, ref positionList);
 
         }
@@ -314,9 +315,242 @@ namespace YSGM_GUI
             additionalParameters = position_TPPointNum.Text;
             UpdateCMD();
         }
+        #endregion
 
+        #region 角色页事件
+        //角色
+        private void role_adventure_level_GotFocus(object sender, RoutedEventArgs e) //冒险等级
+        {
+            mainCMD = "player";
+            parameter = "level";
+            additionalParameters = "";
+        }
 
+        private void role_adventure_level_TextChanged(object sender, TextChangedEventArgs e) //冒险等级
+        {
+            mainCMD = "player";
+            additionalParameters = role_adventure_level.Text;
+            UpdateCMD();
+        }
 
+        private void role_role_level_GotFocus(object sender, RoutedEventArgs e)
+        {
+            mainCMD = "";
+            parameter = "level";
+            additionalParameters = "";
+        }
+
+        private void role_role_level_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            mainCMD = "";
+            parameter = "level";
+            additionalParameters = role_role_level.Text;
+            UpdateCMD();
+        }
+
+        private void role_break_level_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            mainCMD = "";
+            parameter = "break";
+            additionalParameters = "";
+        }
+
+        private void role_break_level_GotFocus(object sender, RoutedEventArgs e)
+        {
+            mainCMD = "";
+            parameter = "break";
+            additionalParameters = role_break_level.Text;
+            UpdateCMD();
+        }
+
+        private void role_skillchoice_Loaded(object sender, RoutedEventArgs e)
+        {
+            //role_skillchoice.Text = "选择你要升级哪个技能";
+            role_skillchoice.Items.Add("1");
+            role_skillchoice.Items.Add("2");
+            role_skillchoice.Items.Add("3");
+        }
+
+        private void role_skillchoice_GotFocus(object sender, RoutedEventArgs e)
+        {
+            //role_skillchoice.Text = "";
+        }
+
+        private void role_skillchoice_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //parameter = role_skillchoice.Items.CurrentItem;
+            UpdateCMD();
+        }
+
+        private void role_skill_level_GotFocus(object sender, RoutedEventArgs e)
+        {
+            mainCMD = "";
+            parameter = "break";
+            additionalParameters = role_break_level.Text;
+            UpdateCMD(); 
+        }
+
+        private void role_skill_level_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            mainCMD = "skill";
+            additionalParameters = role_skill_level.Text;
+            UpdateCMD();
+        }
+
+        private void role_addrole_GotFocus(object sender, RoutedEventArgs e)
+        {
+            mainCMD = "avatar add";
+            parameter = "";
+            additionalParameters = "";
+            UpdateCMD();
+
+            TextBox textBox = (TextBox)sender;
+            currentFocusedBox = textBox;
+            //textBox.SelectAll();
+
+            if (textBox.Text == "点击后在此搜索或在右侧选择")
+            {
+                textBox.Text = "";
+            }
+            ReadFileAndCreateList("Avatar.txt", ref roleList);
+        }
+
+        private void role_addrole_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            mainCMD = "avatar add";
+            parameter = "";
+            additionalParameters = "";
+            UpdateCMD();
+            SearchInList(role_addrole.Text, ref roleList);
+        }
+
+        private void role_nocd_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBox ch = (CheckBox)sender;
+            if (ch.IsChecked == true)
+            {
+                commandBox.Text = "energy infinite on";
+            }
+            else
+            {
+                commandBox.Text = "energy infinite off";
+            }
+        }
+
+        private void role_nocd_Checked(object sender, RoutedEventArgs e)
+        {
+            //CheckBox ch = (CheckBox)sender;
+            //if(role_nocd.Checked != null)
+        }
+
+        private void role_invicible_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBox ch = (CheckBox)sender;
+            if (ch.IsChecked == true)
+            {
+                commandBox.Text = "wudi global avatar on";
+            }
+            else
+            {
+                commandBox.Text = "wudi global avatar off";
+            }
+        }
+
+        private void role_infinite_physical_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBox ch = (CheckBox)sender;
+            if (ch.IsChecked == true)
+            {
+                commandBox.Text = "stamina infinite on";
+            }
+            else
+            {
+                commandBox.Text = "stamina infinite off";
+            }
+        }
+
+        private void role_infinite_elemental_burst_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBox ch = (CheckBox)sender;
+            if (ch.IsChecked == true)
+            {
+                commandBox.Text = "wudi global avatar on";
+            }
+            else
+            {
+                commandBox.Text = "wudi global avatar off";
+            }
+        }
+
+        private void role_unlock_Click(object sender, RoutedEventArgs e) //gm 1000 talent unlock all
+        {
+            mainCMD = "talent unlock all";
+            parameter = "";
+            additionalParameters = "";
+            UpdateCMD();
+        }
+
+        private void role_kill_Click(object sender, RoutedEventArgs e) //gm 1000 kill self
+        {
+            mainCMD = "kill self";
+            parameter = "";
+            additionalParameters = "";
+            UpdateCMD();
+        }
+        #endregion
+
+        #region 武器页事件
+        //武器
+        private void coupon_id_GotFocus(object sender, RoutedEventArgs e)
+        {
+            mainCMD = "equip add";
+            parameter = "";
+            additionalParameters = "";
+            UpdateCMD();
+
+            TextBox textBox = (TextBox)sender;
+            currentFocusedBox = textBox;
+            //textBox.SelectAll();
+
+            if (textBox.Text == "点击后在此搜索或在右侧选择")
+            {
+                textBox.Text = "";
+            }
+            ReadFileAndCreateList("Weapon.txt", ref weaponList);
+        }
+
+        private void coupon_id_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            mainCMD = "equip add";
+            parameter = "";
+            additionalParameters = "";
+            UpdateCMD();
+            SearchInList(coupon_id.Text, ref weaponList);
+        }
+
+        private void coupon_breaklevel_GotFocus(object sender, RoutedEventArgs e)
+        {
+            mainCMD = "equip add";
+            UpdateCMD();
+        }
+
+        private void coupon_breaklevel_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            parameter = coupon_breaklevel.Text;
+            UpdateCMD();
+        }
+
+        private void coupon_refinelevel_GotFocus(object sender, RoutedEventArgs e)
+        {
+            mainCMD = "equip add";
+            UpdateCMD();
+        }
+
+        private void coupon_refinelevel_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            additionalParameters = coupon_refinelevel.Text;
+            UpdateCMD();
+        }
         #endregion
 
         #region GM设置页事件
@@ -349,12 +583,6 @@ namespace YSGM_GUI
 
             Trace.WriteLine(ConfigurationManager.AppSettings.Get("SSH_HOST"));
         }
-
-
-
-
         #endregion
-
-
     }
 }
