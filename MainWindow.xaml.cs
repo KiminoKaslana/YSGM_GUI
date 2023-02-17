@@ -124,9 +124,14 @@ namespace YSGM_GUI
 
             string[] sceneFile;
 
+            if (!Directory.Exists("./Resources/zh-cn"))
+            {
+                Directory.CreateDirectory("./Resources/zh-cn");
+            }
+
             if (!File.Exists("./Resources/zh-cn/" + fileName))
             {
-                File.Create("./Resources/zh-cn/" + fileName);
+                File.WriteAllText("./Resources/zh-cn/" + fileName, "无数据，请检查资源有效性");
             }
 
             sceneFile = File.ReadAllLines("./Resources/zh-cn/" + fileName);
@@ -145,14 +150,19 @@ namespace YSGM_GUI
             listBox.ItemsSource = listBoxItems;
         }
 
-        private void ExecuteButton_Click(object sender, RoutedEventArgs e)
+        private void RunCMDInChildThread()
         {
-            //callback.Content = ExecuteCommand(commandBox.Text);
             Thread thread = new Thread(ChildThreadStart);
             thread.Start(commandBox.Text);
 
             ExecuteButton.IsEnabled = false;
             ExecuteButton.Content = "等待结果";
+        }
+
+        private void ExecuteButton_Click(object sender, RoutedEventArgs e)
+        {
+            //callback.Content = ExecuteCommand(commandBox.Text);
+            RunCMDInChildThread();
         }
 
         private void TestButton_Click(object sender, RoutedEventArgs e)
@@ -173,7 +183,7 @@ namespace YSGM_GUI
 
         private void UpdateCMD()
         {
-            commandBox.Text = "gm " + uidBox.Text + " " + mainCMD + " " + parameter + " " + additionalParameters;
+            commandBox.Text = ("gm " + uidBox.Text + " " + mainCMD + " " + parameter + " " + additionalParameters).Trim().Replace("  ", " ");
         }
 
         private void SearchInList(string key, ref ListBox listBox)
@@ -221,6 +231,77 @@ namespace YSGM_GUI
         #region 位置页事件
 
         //位置
+
+        private void position_X_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (position_X.Text == "X")
+            {
+                position_X.Text = "";
+            }
+        }
+
+        private void position_Y_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (position_Y.Text == "Y")
+            {
+                position_Y.Text = "";
+            }
+        }
+
+        private void position_Z_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (position_Z.Text == "Z")
+            {
+                position_Z.Text = "";
+            }
+        }
+
+        private void position_X_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //此处if的意义是，在调试的过程中，
+            //发现通过xaml设置初始值时textchanged会执行一次，这时控件可能未完成初始化而出现空引用。
+            if (position_X == null || position_Y == null || position_Z == null)
+            {
+                return;
+            }
+
+            //Trace.WriteLine("X change");
+            mainCMD = "goto";
+            parameter = position_X.Text + " " + position_Y.Text + " " + position_Z.Text;
+            additionalParameters = "";
+            UpdateCMD();
+        }
+
+        private void position_Y_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //此处if的意义是，在调试的过程中，
+            //发现通过xaml设置初始值时textchanged会执行一次，这时控件可能未完成初始化而出现空引用。
+            if (position_X == null || position_Y == null || position_Z == null)
+            {
+                return;
+            }
+
+            mainCMD = "goto";
+            parameter = position_X.Text + " " + position_Y.Text + " " + position_Z.Text;
+            additionalParameters = "";
+            UpdateCMD();
+        }
+
+        private void position_Z_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //此处if的意义是，在调试的过程中，
+            //发现通过xaml设置初始值时textchanged会执行一次，这时控件可能未完成初始化而出现空引用。
+            if (position_X == null || position_Y == null || position_Z == null)
+            {
+                return;
+            }
+
+            mainCMD = "goto";
+            parameter = position_X.Text + " " + position_Y.Text + " " + position_Z.Text;
+            additionalParameters = "";
+            UpdateCMD();
+        }
+
         private void position_sceneID_GotFocus(object sender, RoutedEventArgs e) //场景ID
         {
             mainCMD = "jump";
@@ -273,6 +354,21 @@ namespace YSGM_GUI
                 position_TPPoint.Text = "点击后在此搜索或在右侧选择";
             }
 
+            if (position_X.Text == "")
+            {
+                position_X.Text = "X";
+            }
+
+            if (position_Y.Text == "")
+            {
+                position_Y.Text = "Y";
+            }
+
+            if (position_Z.Text == "")
+            {
+                position_Z.Text = "Z";
+            }
+
             commandBox.Focus();
         }
 
@@ -297,8 +393,8 @@ namespace YSGM_GUI
         {
             mainCMD = "jump";
             UpdateCMD();
-            SearchInList(position_sceneID.Text, ref positionList);
 
+            SearchInList(position_sceneID.Text, ref positionList);
         }
 
         private void position_TPPoint_TextChanged(object sender, TextChangedEventArgs e)
@@ -324,6 +420,7 @@ namespace YSGM_GUI
             mainCMD = "player";
             parameter = "level";
             additionalParameters = "";
+            UpdateCMD();
         }
 
         private void role_adventure_level_TextChanged(object sender, TextChangedEventArgs e) //冒险等级
@@ -335,60 +432,73 @@ namespace YSGM_GUI
 
         private void role_role_level_GotFocus(object sender, RoutedEventArgs e)
         {
-            mainCMD = "";
-            parameter = "level";
+            mainCMD = "level";
+            parameter = "";
             additionalParameters = "";
+            UpdateCMD();
         }
 
         private void role_role_level_TextChanged(object sender, TextChangedEventArgs e)
         {
-            mainCMD = "";
-            parameter = "level";
-            additionalParameters = role_role_level.Text;
+            mainCMD = "level";
+            parameter = role_role_level.Text;
+            additionalParameters = "";
             UpdateCMD();
         }
 
         private void role_break_level_TextChanged(object sender, TextChangedEventArgs e)
         {
-            mainCMD = "";
-            parameter = "break";
+            mainCMD = "break";
+            parameter = role_break_level.Text;
             additionalParameters = "";
+            UpdateCMD();
         }
 
         private void role_break_level_GotFocus(object sender, RoutedEventArgs e)
         {
-            mainCMD = "";
-            parameter = "break";
-            additionalParameters = role_break_level.Text;
+            mainCMD = "break";
+            parameter = role_break_level.Text;
+            additionalParameters = "";
             UpdateCMD();
         }
 
         private void role_skillchoice_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //parameter = role_skillchoice.Items.CurrentItem;
+            mainCMD = "skill";
+            parameter = (string)((ComboBoxItem)role_skillchoice.SelectedItem).Content;
+            additionalParameters = role_skill_level.Text;
             UpdateCMD();
         }
 
         private void role_skill_level_GotFocus(object sender, RoutedEventArgs e)
         {
-            mainCMD = "";
-            parameter = "break";
-            additionalParameters = role_break_level.Text;
-            UpdateCMD(); 
+            if (role_skillchoice.SelectedItem == null)
+            {
+                return;
+            }
+            mainCMD = "skill";
+            parameter = (string)((ComboBoxItem)role_skillchoice.SelectedItem).Content;
+            additionalParameters = role_skill_level.Text;
+            UpdateCMD();
         }
 
         private void role_skill_level_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (role_skillchoice.SelectedItem == null)
+            {
+                return;
+            }
             mainCMD = "skill";
+            parameter = (string)((ComboBoxItem)role_skillchoice.SelectedItem).Content;
             additionalParameters = role_skill_level.Text;
             UpdateCMD();
         }
 
         private void role_addrole_GotFocus(object sender, RoutedEventArgs e)
         {
-            mainCMD = "avatar add";
+            mainCMD = "item add";
             parameter = "";
-            additionalParameters = "";
+            additionalParameters = "1";
             UpdateCMD();
 
             TextBox textBox = (TextBox)sender;
@@ -404,30 +514,11 @@ namespace YSGM_GUI
 
         private void role_addrole_TextChanged(object sender, TextChangedEventArgs e)
         {
-            mainCMD = "avatar add";
+            mainCMD = "item add";
             parameter = "";
-            additionalParameters = "";
+            additionalParameters = "1";
             UpdateCMD();
             SearchInList(role_addrole.Text, ref roleList);
-        }
-
-        private void role_nocd_Click(object sender, RoutedEventArgs e)
-        {
-            CheckBox ch = (CheckBox)sender;
-            if (ch.IsChecked == true)
-            {
-                commandBox.Text = "energy infinite on";
-            }
-            else
-            {
-                commandBox.Text = "energy infinite off";
-            }
-        }
-
-        private void role_nocd_Checked(object sender, RoutedEventArgs e)
-        {
-            //CheckBox ch = (CheckBox)sender;
-            //if(role_nocd.Checked != null)
         }
 
         private void role_invicible_Click(object sender, RoutedEventArgs e)
@@ -435,12 +526,14 @@ namespace YSGM_GUI
             CheckBox ch = (CheckBox)sender;
             if (ch.IsChecked == true)
             {
-                commandBox.Text = "wudi global avatar on";
+                commandBox.Text = "gm " + uidBox.Text + " wudi global avatar on";
             }
             else
             {
-                commandBox.Text = "wudi global avatar off";
+                commandBox.Text = "gm " + uidBox.Text + " wudi global avatar off";
             }
+
+            RunCMDInChildThread();
         }
 
         private void role_infinite_physical_Click(object sender, RoutedEventArgs e)
@@ -448,12 +541,14 @@ namespace YSGM_GUI
             CheckBox ch = (CheckBox)sender;
             if (ch.IsChecked == true)
             {
-                commandBox.Text = "stamina infinite on";
+                commandBox.Text = "gm " + uidBox.Text + " stamina infinite on";
             }
             else
             {
-                commandBox.Text = "stamina infinite off";
+                commandBox.Text = "gm " + uidBox.Text + " stamina infinite off";
             }
+
+            RunCMDInChildThread();
         }
 
         private void role_infinite_elemental_burst_Click(object sender, RoutedEventArgs e)
@@ -461,12 +556,14 @@ namespace YSGM_GUI
             CheckBox ch = (CheckBox)sender;
             if (ch.IsChecked == true)
             {
-                commandBox.Text = "wudi global avatar on";
+                commandBox.Text = "gm " + uidBox.Text + " wudi global avatar on";
             }
             else
             {
-                commandBox.Text = "wudi global avatar off";
+                commandBox.Text = "gm " + uidBox.Text + " wudi global avatar off";
             }
+
+            RunCMDInChildThread();
         }
 
         private void role_unlock_Click(object sender, RoutedEventArgs e) //gm 1000 talent unlock all
@@ -475,6 +572,8 @@ namespace YSGM_GUI
             parameter = "";
             additionalParameters = "";
             UpdateCMD();
+
+            RunCMDInChildThread();
         }
 
         private void role_kill_Click(object sender, RoutedEventArgs e) //gm 1000 kill self
@@ -483,6 +582,8 @@ namespace YSGM_GUI
             parameter = "";
             additionalParameters = "";
             UpdateCMD();
+
+            RunCMDInChildThread();
         }
         #endregion
 
@@ -492,7 +593,7 @@ namespace YSGM_GUI
         {
             mainCMD = "equip add";
             parameter = "";
-            additionalParameters = "";
+            additionalParameters = coupon_breaklevel.Text + " " + coupon_refinelevel.Text;
             UpdateCMD();
 
             TextBox textBox = (TextBox)sender;
@@ -509,8 +610,8 @@ namespace YSGM_GUI
         private void coupon_id_TextChanged(object sender, TextChangedEventArgs e)
         {
             mainCMD = "equip add";
-            parameter = "";
-            additionalParameters = "";
+            //parameter = ;
+            additionalParameters = coupon_breaklevel.Text + " " + coupon_refinelevel.Text;
             UpdateCMD();
             SearchInList(coupon_id.Text, ref weaponList);
         }
@@ -523,7 +624,7 @@ namespace YSGM_GUI
 
         private void coupon_breaklevel_TextChanged(object sender, TextChangedEventArgs e)
         {
-            parameter = coupon_breaklevel.Text;
+            additionalParameters = coupon_breaklevel.Text + " " + coupon_refinelevel.Text;
             UpdateCMD();
         }
 
@@ -535,7 +636,7 @@ namespace YSGM_GUI
 
         private void coupon_refinelevel_TextChanged(object sender, TextChangedEventArgs e)
         {
-            additionalParameters = coupon_refinelevel.Text;
+            additionalParameters = coupon_breaklevel.Text + " " + coupon_refinelevel.Text;
             UpdateCMD();
         }
         #endregion
@@ -571,5 +672,7 @@ namespace YSGM_GUI
             Trace.WriteLine(ConfigurationManager.AppSettings.Get("SSH_HOST"));
         }
         #endregion
+
+
     }
 }
