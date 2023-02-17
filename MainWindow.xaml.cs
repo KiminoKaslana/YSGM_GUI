@@ -363,19 +363,6 @@ namespace YSGM_GUI
             UpdateCMD();
         }
 
-        private void role_skillchoice_Loaded(object sender, RoutedEventArgs e)
-        {
-            //role_skillchoice.Text = "选择你要升级哪个技能";
-            role_skillchoice.Items.Add("1");
-            role_skillchoice.Items.Add("2");
-            role_skillchoice.Items.Add("3");
-        }
-
-        private void role_skillchoice_GotFocus(object sender, RoutedEventArgs e)
-        {
-            //role_skillchoice.Text = "";
-        }
-
         private void role_skillchoice_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //parameter = role_skillchoice.Items.CurrentItem;
