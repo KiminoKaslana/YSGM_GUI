@@ -47,7 +47,7 @@
         <TabControl HorizontalAlignment="Center" Height="375" VerticalAlignment="Top" Width="880" Background="{x:Null}" BorderBrush="{x:Null}" Margin="0,60,0,0">
             <TabItem Header="位置" Width="60" Height="25" Background="#99000000" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource DefaultTabItemStyle}">
                 <Grid x:Name="positionGrid" Background="#7F000000" MouseDown="positionGrid_MouseDown">
-                    <Label x:Name="chuansong" Content="#传送" HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top" Width="83" Height="40" FontSize="20" FontWeight="Bold" Background="{x:Null}" Foreground="White" Grid.ColumnSpan="2"/>
+                    <Label x:Name="chuansong" Content="#传送" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="83" Height="40" FontSize="20" FontWeight="Bold" Background="{x:Null}" Foreground="White"/>
                     <Label Content="坐标" HorizontalAlignment="Left" Margin="32,60,0,0" VerticalAlignment="Top" FontSize="16" Foreground="White" Width="50" Height="30" Grid.ColumnSpan="2"/>
                     <Label Content="场景ID" HorizontalAlignment="Left" Margin="32,115,0,0" VerticalAlignment="Top" Width="73" Height="30" FontSize="16" Foreground="White" Grid.ColumnSpan="2"/>
                     <Label Content="开传送点" HorizontalAlignment="Left" Margin="32,168,0,0" VerticalAlignment="Top" Foreground="White" Width="83" Height="30" FontSize="16" Grid.ColumnSpan="2"/>
@@ -63,7 +63,7 @@
             </TabItem>
             <TabItem Header="角色" Width="60" Height="25" Background="#99000000" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource DefaultTabItemStyle}">
                 <Grid Background="#7F000000">
-                    <Label x:Name="chuansong_Copy1" Content="#角色" HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top" Width="83" Height="40" FontSize="20" FontWeight="Bold" Background="{x:Null}" Foreground="White"/>
+                    <Label x:Name="avatarLabel" Content="#角色" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="83" Height="40" FontSize="20" FontWeight="Bold" Background="{x:Null}" Foreground="White"/>
                     <Label Content="冒险等级" HorizontalAlignment="Left" Margin="30,60,0,0" VerticalAlignment="Top" FontSize="16" Foreground="White" Width="80" Height="30"/>
                     <Label Content="角色等级" HorizontalAlignment="Left" Margin="30,180,0,0" VerticalAlignment="Top" FontSize="16" Foreground="White" Width="116" Height="30"/>
                     <Label Content="添加角色" HorizontalAlignment="Left" Margin="30,140,0,0" VerticalAlignment="Top" FontSize="16" Foreground="White" Width="110" Height="30"/>
@@ -96,7 +96,7 @@
             </TabItem>
             <TabItem Header="武器" Width="60" Height="25" Background="#99000000" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource DefaultTabItemStyle}">
                 <Grid Background="#7F000000">
-                    <Label x:Name="chuansong_Copy" Content="#武器生成" HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top" Width="110" Height="40" FontSize="20" FontWeight="Bold" Background="{x:Null}" Foreground="White" Grid.ColumnSpan="2"/>
+                    <Label x:Name="chuansong_Copy" Content="#武器生成" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="110" Height="40" FontSize="20" FontWeight="Bold" Background="{x:Null}" Foreground="White"/>
                     <Label Content="id/名称" HorizontalAlignment="Left" Margin="40,60,0,0" VerticalAlignment="Top" FontSize="16" Foreground="White" Width="80" Height="40" Grid.Column="1" BorderThickness="2,2,2,2"/>
                     <Label Content="武器等级" HorizontalAlignment="Left" Margin="40,110,0,0" VerticalAlignment="Top" FontSize="16" Foreground="White" Width="80" Height="40" Grid.Column="1" BorderThickness="2,2,2,2"/>
                     <Label Content="突破等级" HorizontalAlignment="Left" Margin="40,160,0,0" VerticalAlignment="Top" FontSize="16" Foreground="White" Width="80" Height="40" Grid.Column="1" BorderThickness="2,2,2,2"/>
@@ -107,7 +107,22 @@
                 </Grid>
             </TabItem>
             <TabItem Header="圣遗物" Width="60" Height="25" Background="#99000000" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource DefaultTabItemStyle}">
-                <Grid Background="#7F000000"/>
+                <Grid Background="#7F000000">
+                    <TextBox x:Name="artifactAmount" TextWrapping="Wrap" Text="" Width="325" Height="30" Margin="150,140,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" BorderBrush="White" Background="#4C000000" BorderThickness="2,2,2,2" VerticalContentAlignment="Center" FontSize="12" GotFocus="artifactAmount_GotFocus" TextChanged="artifactAmount_TextChanged"/>
+                    <Label Content="#圣遗物生成" HorizontalAlignment="Left" Height="45" Margin="10,10,0,0" VerticalAlignment="Top" Width="135" Foreground="White" FontSize="20" FontWeight="Bold" Focusable="True"/>
+                    <Label Content="圣遗物ID或名称" HorizontalAlignment="Left" Margin="22,60,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16" Height="30"/>
+                    <TextBox x:Name="artifactID" TextWrapping="Wrap" Text="点击后在此搜索或在右侧选择" Width="325" Height="30" Margin="150,60,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" BorderBrush="White" Background="#4C000000" BorderThickness="2,2,2,2" VerticalContentAlignment="Center" FontSize="12" GotFocus="artifactID_GotFocus" TextChanged="artifactID_TextChanged"/>
+                    <ListBox x:Name="artifactList" Height="289" VerticalAlignment="Top" d:ItemsSource="{d:SampleData ItemCount=5}" BorderBrush="White" Background="#4C000000" Foreground="White" Margin="0,30,32,0" HorizontalAlignment="Right" Width="265" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="Selected"/>
+                    <Label Content="星级筛选器" HorizontalAlignment="Left" Margin="22,100,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16" Height="30"/>
+                    <ComboBox Style="{DynamicResource ComboBoxStyle}" x:Name="artifactRankFilter" Width="150" Margin="150,100,0,0" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" BorderBrush="{x:Null}" BorderThickness="2,2,2,2" VerticalContentAlignment="Center" IsSynchronizedWithCurrentItem="True" SelectionChanged="artifactRankFilter_SelectionChanged">
+                        <ComboBoxItem Content="1" Foreground="White" Background="#FF373737" Style="{DynamicResource DefaultCBIStyle}"/>
+                        <ComboBoxItem Content="2" Foreground="White" Background="#FF373737" Style="{DynamicResource DefaultCBIStyle}"/>
+                        <ComboBoxItem Content="3" Foreground="White" Background="#FF373737" Style="{DynamicResource DefaultCBIStyle}"/>
+                        <ComboBoxItem Content="4" Foreground="White" Background="#FF373737" Style="{DynamicResource DefaultCBIStyle}"/>
+                        <ComboBoxItem Content="5" Foreground="White" Background="#FF373737" Style="{DynamicResource DefaultCBIStyle}"/>
+                    </ComboBox>
+                    <Label Content="数量" HorizontalAlignment="Left" Margin="22,140,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16" Height="30"/>
+                </Grid>
             </TabItem>
             <TabItem Header="其他" Width="60" Height="25" Background="#99000000" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource DefaultTabItemStyle}">
                 <Grid Background="#7F000000"/>

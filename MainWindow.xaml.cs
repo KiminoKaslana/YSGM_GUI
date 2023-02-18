@@ -186,9 +186,19 @@ namespace YSGM_GUI
             commandBox.Text = ("gm " + uidBox.Text + " " + mainCMD + " " + parameter + " " + additionalParameters).Trim().Replace("  ", " ");
         }
 
-        private void SearchInList(string key, ref ListBox listBox)
+        private void SearchInList(string key, ref ListBox listBox, string artifactRank = "0")
         {
-            Regex regex = new Regex(@".*" + key + @".*");
+            Regex regex;
+
+            if (artifactRank != "0")
+            {
+                regex = new Regex(@"^\d\d" + artifactRank + ".*" + key + @".*");
+            }
+            else
+            {
+                regex = new Regex(@".*" + key + @".*");
+            }
+
 
             if (listBox != null)
             {
@@ -417,8 +427,8 @@ namespace YSGM_GUI
         //角色
         private void role_adventure_level_GotFocus(object sender, RoutedEventArgs e) //冒险等级
         {
-            mainCMD = "player";
-            parameter = "level";
+            mainCMD = "player level";
+            parameter = "";
             additionalParameters = "";
             UpdateCMD();
         }
@@ -426,7 +436,7 @@ namespace YSGM_GUI
         private void role_adventure_level_TextChanged(object sender, TextChangedEventArgs e) //冒险等级
         {
             mainCMD = "player";
-            additionalParameters = role_adventure_level.Text;
+            parameter = role_adventure_level.Text;
             UpdateCMD();
         }
 
@@ -624,6 +634,7 @@ namespace YSGM_GUI
 
         private void coupon_breaklevel_TextChanged(object sender, TextChangedEventArgs e)
         {
+            mainCMD = "equip add";
             additionalParameters = coupon_breaklevel.Text + " " + coupon_refinelevel.Text;
             UpdateCMD();
         }
@@ -636,9 +647,82 @@ namespace YSGM_GUI
 
         private void coupon_refinelevel_TextChanged(object sender, TextChangedEventArgs e)
         {
+            mainCMD = "equip add";
             additionalParameters = coupon_breaklevel.Text + " " + coupon_refinelevel.Text;
             UpdateCMD();
         }
+        #endregion
+
+        #region 圣遗物页事件
+        private void artifactID_GotFocus(object sender, RoutedEventArgs e)
+        {
+            mainCMD = "item add";
+            parameter = "";
+            additionalParameters = coupon_breaklevel.Text + " " + coupon_refinelevel.Text;
+            UpdateCMD();
+
+            TextBox textBox = (TextBox)sender;
+            currentFocusedBox = textBox;
+            //textBox.SelectAll();
+
+            if (textBox.Text == "点击后在此搜索或在右侧选择")
+            {
+                textBox.Text = "";
+            }
+            ReadFileAndCreateList("Artifact.txt", ref artifactList);
+
+            if (artifactRankFilter.SelectedItem != null)
+            {
+                SearchInList(artifactID.Text, ref artifactList, (string)((ListBoxItem)artifactRankFilter.SelectedItem).Content);
+            }
+            else
+            {
+                SearchInList(artifactID.Text, ref artifactList);
+            }
+        }
+
+        private void artifactID_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (artifactAmount == null || artifactRankFilter == null)
+            {
+                return;
+            }
+
+            mainCMD = "item add";
+            additionalParameters = artifactAmount.Text;
+            UpdateCMD();
+
+            if (artifactRankFilter.SelectedItem != null)
+            {
+                SearchInList(artifactID.Text, ref artifactList, (string)((ListBoxItem)artifactRankFilter.SelectedItem).Content);
+            }
+            else
+            {
+                SearchInList(artifactID.Text, ref artifactList);
+            }
+
+        }
+
+        private void artifactAmount_GotFocus(object sender, RoutedEventArgs e)
+        {
+            mainCMD = "item add";
+            additionalParameters = artifactAmount.Text;
+            UpdateCMD();
+        }
+
+        private void artifactAmount_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            mainCMD = "item add";
+            additionalParameters = artifactAmount.Text;
+            UpdateCMD();
+        }
+
+        private void artifactRankFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            mainCMD = "item add";
+            SearchInList(artifactID.Text, ref artifactList, (string)((ListBoxItem)artifactRankFilter.SelectedItem).Content);
+        }
+
         #endregion
 
         #region GM设置页事件
@@ -671,8 +755,9 @@ namespace YSGM_GUI
 
             Trace.WriteLine(ConfigurationManager.AppSettings.Get("SSH_HOST"));
         }
+
         #endregion
 
-
+        
     }
 }
