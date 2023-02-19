@@ -189,16 +189,7 @@ namespace YSGM_GUI
         private void SearchInList(string key, ref ListBox listBox, string artifactRank = "0")
         {
             Regex regex;
-
-            if (artifactRank != "0")
-            {
-                regex = new Regex(@"^\d\d" + artifactRank + ".*" + key + @".*");
-            }
-            else
-            {
-                regex = new Regex(@".*" + key + @".*");
-            }
-
+            regex = new Regex(@".*" + key + @".*");
 
             if (listBox != null)
             {
@@ -210,10 +201,21 @@ namespace YSGM_GUI
 
                     for (int i = 0; i < currentList.Count; i++)
                     {
-                        if (regex.IsMatch((string)currentList[i].Content))
+                        if (artifactRank != "0")
                         {
-                            list.Add(currentList[i]);
+                            if (regex.IsMatch((string)currentList[i].Content) && ((string)currentList[i].Content)[2] == artifactRank[0])
+                            {
+                                list.Add(currentList[i]);
+                            }
                         }
+                        else
+                        {
+                            if (regex.IsMatch((string)currentList[i].Content))
+                            {
+                                list.Add(currentList[i]);
+                            }
+                        }
+
                     }
 
                     listBox.ItemsSource = list;
@@ -428,22 +430,23 @@ namespace YSGM_GUI
         private void role_adventure_level_GotFocus(object sender, RoutedEventArgs e) //冒险等级
         {
             mainCMD = "player level";
-            parameter = "";
+            parameter = role_adventure_level.Text;
             additionalParameters = "";
             UpdateCMD();
         }
 
         private void role_adventure_level_TextChanged(object sender, TextChangedEventArgs e) //冒险等级
         {
-            mainCMD = "player";
+            mainCMD = "player level";
             parameter = role_adventure_level.Text;
+            additionalParameters = "";
             UpdateCMD();
         }
 
         private void role_role_level_GotFocus(object sender, RoutedEventArgs e)
         {
             mainCMD = "level";
-            parameter = "";
+            parameter = role_role_level.Text;
             additionalParameters = "";
             UpdateCMD();
         }
@@ -566,11 +569,11 @@ namespace YSGM_GUI
             CheckBox ch = (CheckBox)sender;
             if (ch.IsChecked == true)
             {
-                commandBox.Text = "gm " + uidBox.Text + " wudi global avatar on";
+                commandBox.Text = "gm " + uidBox.Text + " energy infinite on";
             }
             else
             {
-                commandBox.Text = "gm " + uidBox.Text + " wudi global avatar off";
+                commandBox.Text = "gm " + uidBox.Text + " energy infinite off";
             }
 
             RunCMDInChildThread();
@@ -629,6 +632,7 @@ namespace YSGM_GUI
         private void coupon_breaklevel_GotFocus(object sender, RoutedEventArgs e)
         {
             mainCMD = "equip add";
+            additionalParameters = coupon_breaklevel.Text + " " + coupon_refinelevel.Text;
             UpdateCMD();
         }
 
@@ -642,6 +646,7 @@ namespace YSGM_GUI
         private void coupon_refinelevel_GotFocus(object sender, RoutedEventArgs e)
         {
             mainCMD = "equip add";
+            additionalParameters = coupon_breaklevel.Text + " " + coupon_refinelevel.Text;
             UpdateCMD();
         }
 
@@ -725,6 +730,51 @@ namespace YSGM_GUI
 
         #endregion
 
+        #region 其他（物品）页事件
+        private void itemID_GotFocus(object sender, RoutedEventArgs e)
+        {
+            mainCMD = "item add";
+            parameter = itemID.Text;
+            additionalParameters = itemAmount.Text;
+            UpdateCMD();
+
+            TextBox textBox = (TextBox)sender;
+            currentFocusedBox = textBox;
+            //textBox.SelectAll();
+
+            if (textBox.Text == "点击后在此搜索或在右侧选择")
+            {
+                textBox.Text = "";
+            }
+            ReadFileAndCreateList("Item.txt", ref itemList);
+        }
+
+        private void itemID_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            mainCMD = "item add";
+            parameter = itemID.Text;
+            additionalParameters = itemAmount.Text;
+            UpdateCMD();
+            SearchInList(itemID.Text, ref itemList);
+        }
+
+        private void itemAmount_GotFocus(object sender, RoutedEventArgs e)
+        {
+            mainCMD = "item add";
+            parameter = itemID.Text;
+            additionalParameters = itemAmount.Text;
+            UpdateCMD();
+        }
+
+        private void itemAmount_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            mainCMD = "item add";
+            parameter = itemID.Text;
+            additionalParameters = itemAmount.Text;
+            UpdateCMD();
+        }
+        #endregion
+
         #region GM设置页事件
         private void SaveSettingsButton_Click(object sender, RoutedEventArgs e)
         {
@@ -753,8 +803,9 @@ namespace YSGM_GUI
             configFile.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
 
-            Trace.WriteLine(ConfigurationManager.AppSettings.Get("SSH_HOST"));
+            //Trace.WriteLine(ConfigurationManager.AppSettings.Get("SSH_HOST"));
         }
+
 
         #endregion
 

@@ -6,11 +6,16 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <StartupObject>YSGM_GUI.App</StartupObject>
+    <ApplicationIcon>荧.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Genshin.png" />
     <None Remove="荧.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="荧.ico" />
   </ItemGroup>
 
   <ItemGroup>
