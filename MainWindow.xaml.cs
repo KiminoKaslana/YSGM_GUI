@@ -475,7 +475,8 @@ namespace YSGM_GUI
         private void role_skillchoice_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             mainCMD = "skill";
-            parameter = (string)((ComboBoxItem)role_skillchoice.SelectedItem).Content;
+            parameter = Convert.ToString(role_skillchoice.SelectedItem);
+            //parameter = (string)((ComboBoxItem)role_skillchoice.SelectedItem).Content;
             additionalParameters = role_skill_level.Text;
             UpdateCMD();
         }
@@ -566,11 +567,11 @@ namespace YSGM_GUI
             CheckBox ch = (CheckBox)sender;
             if (ch.IsChecked == true)
             {
-                commandBox.Text = "gm " + uidBox.Text + " wudi global avatar on";
+                commandBox.Text = "gm " + uidBox.Text + " energy infinite on";
             }
             else
             {
-                commandBox.Text = "gm " + uidBox.Text + " wudi global avatar off";
+                commandBox.Text = "gm " + uidBox.Text + " energy infinite off";
             }
 
             RunCMDInChildThread();
