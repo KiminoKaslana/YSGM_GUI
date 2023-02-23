@@ -38,6 +38,8 @@ namespace YSGM_GUI
             CommandMap.RegisterAll();
 
             LoadConfiguration();
+
+            commandBox.Text = "gm";
         }
 
         #region 应用级事件
@@ -232,7 +234,7 @@ namespace YSGM_GUI
                 return;
             }
 
-            currentFocusedBox.Text = (string)list.Content;
+            currentFocusedBox.Text = regex.Match((string)list.Content).Value;
             parameter = regex.Match((string)list.Content).Value;
 
             UpdateCMD();
@@ -510,7 +512,7 @@ namespace YSGM_GUI
         private void role_addrole_GotFocus(object sender, RoutedEventArgs e)
         {
             mainCMD = "item add";
-            parameter = "";
+            parameter = role_addrole.Text;
             additionalParameters = "1";
             UpdateCMD();
 
@@ -528,7 +530,7 @@ namespace YSGM_GUI
         private void role_addrole_TextChanged(object sender, TextChangedEventArgs e)
         {
             mainCMD = "item add";
-            parameter = "";
+            parameter = role_addrole.Text;
             additionalParameters = "1";
             UpdateCMD();
             SearchInList(role_addrole.Text, ref roleList);
@@ -605,7 +607,7 @@ namespace YSGM_GUI
         private void coupon_id_GotFocus(object sender, RoutedEventArgs e)
         {
             mainCMD = "equip add";
-            parameter = "";
+            parameter = coupon_id.Text;
             additionalParameters = coupon_breaklevel.Text + " " + coupon_refinelevel.Text;
             UpdateCMD();
 
@@ -623,7 +625,7 @@ namespace YSGM_GUI
         private void coupon_id_TextChanged(object sender, TextChangedEventArgs e)
         {
             mainCMD = "equip add";
-            //parameter = ;
+            parameter = coupon_id.Text;
             additionalParameters = coupon_breaklevel.Text + " " + coupon_refinelevel.Text;
             UpdateCMD();
             SearchInList(coupon_id.Text, ref weaponList);
@@ -632,6 +634,7 @@ namespace YSGM_GUI
         private void coupon_breaklevel_GotFocus(object sender, RoutedEventArgs e)
         {
             mainCMD = "equip add";
+            parameter = coupon_id.Text;
             additionalParameters = coupon_breaklevel.Text + " " + coupon_refinelevel.Text;
             UpdateCMD();
         }
@@ -639,6 +642,7 @@ namespace YSGM_GUI
         private void coupon_breaklevel_TextChanged(object sender, TextChangedEventArgs e)
         {
             mainCMD = "equip add";
+            parameter = coupon_id.Text;
             additionalParameters = coupon_breaklevel.Text + " " + coupon_refinelevel.Text;
             UpdateCMD();
         }
@@ -646,6 +650,7 @@ namespace YSGM_GUI
         private void coupon_refinelevel_GotFocus(object sender, RoutedEventArgs e)
         {
             mainCMD = "equip add";
+            parameter = coupon_id.Text;
             additionalParameters = coupon_breaklevel.Text + " " + coupon_refinelevel.Text;
             UpdateCMD();
         }
@@ -653,6 +658,7 @@ namespace YSGM_GUI
         private void coupon_refinelevel_TextChanged(object sender, TextChangedEventArgs e)
         {
             mainCMD = "equip add";
+            parameter = coupon_id.Text;
             additionalParameters = coupon_breaklevel.Text + " " + coupon_refinelevel.Text;
             UpdateCMD();
         }
@@ -662,7 +668,7 @@ namespace YSGM_GUI
         private void artifactID_GotFocus(object sender, RoutedEventArgs e)
         {
             mainCMD = "item add";
-            parameter = "";
+            parameter = artifactID.Text;
             additionalParameters = coupon_breaklevel.Text + " " + coupon_refinelevel.Text;
             UpdateCMD();
 
@@ -711,6 +717,7 @@ namespace YSGM_GUI
         private void artifactAmount_GotFocus(object sender, RoutedEventArgs e)
         {
             mainCMD = "item add";
+            parameter = artifactID.Text;
             additionalParameters = artifactAmount.Text;
             UpdateCMD();
         }
@@ -718,6 +725,7 @@ namespace YSGM_GUI
         private void artifactAmount_TextChanged(object sender, TextChangedEventArgs e)
         {
             mainCMD = "item add";
+            parameter = artifactID.Text;
             additionalParameters = artifactAmount.Text;
             UpdateCMD();
         }
