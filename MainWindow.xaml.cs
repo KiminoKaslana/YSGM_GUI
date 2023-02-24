@@ -784,6 +784,10 @@ namespace YSGM_GUI
         }
         #endregion
 
+        #region 收藏夹
+
+        #endregion
+
         #region GM设置页事件
         private void SaveSettingsButton_Click(object sender, RoutedEventArgs e)
         {
@@ -816,8 +820,94 @@ namespace YSGM_GUI
         }
 
 
+
         #endregion
 
-        
+        private void SaveFavourite()
+        {
+            string favFile = "";
+
+            foreach (ListBoxItem item in favouriteList.ItemsSource)
+            {
+                favFile += ((string)item.Content + "@" + (string)item.Tag + "\n");
+            }
+
+            File.WriteAllText("./Resources/zh-cn/favourite.txt", favFile);
+        }
+
+        private void favourite_addButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (favourite_customCommandBox.Text == "" 
+                || favourite_commandNoteBox.Text.Contains('@')
+                || favourite_customCommandBox.Text.Contains('@'))
+            {
+                callback.Content = "自定义命令为空或含有特殊字符";
+                return;
+            }
+
+            ListBoxItem newItem = new ListBoxItem();
+            newItem.Content = favourite_customCommandBox.Text;
+            newItem.Tag = favourite_commandNoteBox.Text;
+
+            currentList.Add(newItem);
+            favouriteList.ItemsSource = null;//剔除itemsource，然后重载，以此实现刷新
+            favouriteList.ItemsSource = currentList;
+
+            SaveFavourite();
+        }
+
+        private void favourite_deleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (favouriteList.SelectedIndex != -1)
+            {
+                currentList.RemoveAt(favouriteList.SelectedIndex);
+                favouriteList.ItemsSource = null;//剔除itemsource，然后重载，以此实现刷新
+                favouriteList.ItemsSource = currentList;
+
+                SaveFavourite();
+            }
+        }
+
+        private void favourite_editButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (favouriteList.SelectedIndex != -1)
+            {
+                currentList[favouriteList.SelectedIndex].Content = favourite_customCommandBox.Text;
+                currentList[favouriteList.SelectedIndex].Tag = favourite_commandNoteBox.Text;
+                Trace.WriteLine("Tag change");
+                SaveFavourite();
+            }
+        }
+
+        private void favouriteList_Loaded(object sender, RoutedEventArgs e)
+        {
+            ReadFileAndCreateList("favourite.txt", ref favouriteList);
+
+            foreach (ListBoxItem item in currentList)
+            {
+                if (((string)item.Content).Contains('@'))
+                {
+                    item.Tag = ((string)item.Content).Split('@')[1];
+                    item.Content = ((string)item.Content).Split('@')[0];
+                }
+                else
+                {
+                    item.Tag = "";
+                }
+
+            }
+            //favouriteList.ItemsSource
+        }
+
+        private void favouriteList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (favouriteList.SelectedItem != null)
+            {
+                favourite_customCommandBox.Text = (string)((ListBoxItem)favouriteList.SelectedItem).Content;
+                favourite_commandNoteBox.Text = (string)((ListBoxItem)favouriteList.SelectedItem).Tag;
+
+                commandBox.Text = "gm " + uidBox.Text + " " + favourite_customCommandBox.Text;
+            }
+        }
     }
 }
