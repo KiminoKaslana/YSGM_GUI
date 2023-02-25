@@ -784,44 +784,7 @@ namespace YSGM_GUI
         }
         #endregion
 
-        #region 收藏夹
-
-        #endregion
-
-        #region GM设置页事件
-        private void SaveSettingsButton_Click(object sender, RoutedEventArgs e)
-        {
-            string[] config = new string[5];
-            config[0] = hostIP.Text;
-            config[1] = sshUser.Text;
-            config[2] = "http://" + hostIP.Text + ":" + port.Text + "/api";
-            config[3] = targetRegion.Text;
-            config[4] = defaultUID.Text;
-
-            /*ConfigurationManager.AppSettings.Set("SSH_HOST", config[0]);
-            ConfigurationManager.AppSettings.Set("SSH_USER", config[1]);
-            ConfigurationManager.AppSettings.Set("MUIP_HOST", config[2]);
-            ConfigurationManager.AppSettings.Set("MUIP_TARGET_REGION", config[3]);
-            ConfigurationManager.AppSettings.Set("UID", config[4]);*/
-
-            Configuration configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            var settings = configFile.AppSettings.Settings;
-
-            settings["SSH_HOST"].Value = config[0];
-            settings["SSH_USER"].Value = config[1];
-            settings["MUIP_HOST"].Value = config[2];
-            settings["MUIP_TARGET_REGION"].Value = config[3];
-            settings["UID"].Value = config[4];
-
-            configFile.Save(ConfigurationSaveMode.Modified);
-            ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
-
-            //Trace.WriteLine(ConfigurationManager.AppSettings.Get("SSH_HOST"));
-        }
-
-
-
-        #endregion
+        #region 收藏夹事件
 
         private void SaveFavourite()
         {
@@ -837,7 +800,7 @@ namespace YSGM_GUI
 
         private void favourite_addButton_Click(object sender, RoutedEventArgs e)
         {
-            if (favourite_customCommandBox.Text == "" 
+            if (favourite_customCommandBox.Text == ""
                 || favourite_commandNoteBox.Text.Contains('@')
                 || favourite_customCommandBox.Text.Contains('@'))
             {
@@ -909,5 +872,43 @@ namespace YSGM_GUI
                 commandBox.Text = "gm " + uidBox.Text + " " + favourite_customCommandBox.Text;
             }
         }
+        #endregion
+
+        #region GM设置页事件
+        private void SaveSettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            string[] config = new string[5];
+            config[0] = hostIP.Text;
+            config[1] = sshUser.Text;
+            config[2] = "http://" + hostIP.Text + ":" + port.Text + "/api";
+            config[3] = targetRegion.Text;
+            config[4] = defaultUID.Text;
+
+            /*ConfigurationManager.AppSettings.Set("SSH_HOST", config[0]);
+            ConfigurationManager.AppSettings.Set("SSH_USER", config[1]);
+            ConfigurationManager.AppSettings.Set("MUIP_HOST", config[2]);
+            ConfigurationManager.AppSettings.Set("MUIP_TARGET_REGION", config[3]);
+            ConfigurationManager.AppSettings.Set("UID", config[4]);*/
+
+            Configuration configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var settings = configFile.AppSettings.Settings;
+
+            settings["SSH_HOST"].Value = config[0];
+            settings["SSH_USER"].Value = config[1];
+            settings["MUIP_HOST"].Value = config[2];
+            settings["MUIP_TARGET_REGION"].Value = config[3];
+            settings["UID"].Value = config[4];
+
+            configFile.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
+
+            //Trace.WriteLine(ConfigurationManager.AppSettings.Get("SSH_HOST"));
+        }
+
+
+
+        #endregion
+
+        
     }
 }

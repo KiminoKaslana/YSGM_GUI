@@ -23,19 +23,35 @@ namespace YSGM_GUI
 
         public string GM(string uid, string cmd)
         {
-            return GET(1116, new Dictionary<string, string>()
+            try
+            {
+                return GET(1116, new Dictionary<string, string>()
             {
                 { "uid", uid },
                 { "msg", cmd }
             });
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+
         }
 
         public string FetchPlayerNum()
         {
-            return GET(1101, new Dictionary<string, string>()
+            try
             {
-                
-            });
+                return GET(1101, new Dictionary<string, string>()
+                {
+
+                });
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+
         }
 
         public string FetchPlayerBin(string uid)
@@ -55,7 +71,8 @@ namespace YSGM_GUI
             var builder = new UriBuilder(ConfigurationManager.AppSettings.Get("MUIP_HOST")!);
 #endif
             var query = HttpUtility.ParseQueryString(builder.Query);
-            foreach(KeyValuePair<string, string> entry in param) {
+            foreach (KeyValuePair<string, string> entry in param)
+            {
                 query[entry.Key] = entry.Value;
             }
             query["cmd"] = cmd.ToString();
