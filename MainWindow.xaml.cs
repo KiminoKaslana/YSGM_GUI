@@ -782,6 +782,22 @@ namespace YSGM_GUI
             additionalParameters = itemAmount.Text;
             UpdateCMD();
         }
+
+        private void mcoinAmount_GotFocus(object sender, RoutedEventArgs e)
+        {
+            mainCMD = "mcoin";
+            parameter = mcoinAmount.Text;
+            additionalParameters = "";
+            UpdateCMD();
+        }
+
+        private void mcoinAmount_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            mainCMD = "mcoin";
+            parameter = mcoinAmount.Text;
+            additionalParameters = "";
+            UpdateCMD();
+        }
         #endregion
 
         #region 收藏夹事件
@@ -904,6 +920,7 @@ namespace YSGM_GUI
 
             //Trace.WriteLine(ConfigurationManager.AppSettings.Get("SSH_HOST"));
         }
+
 
 
 
